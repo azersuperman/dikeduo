@@ -1,30 +1,33 @@
 import { loginAPI, getValidationAPI } from '@/api/login'
-
 export default {
   namespaced: true,
   state: {
     token: null, // 可以为''吗
-    id: ''
+    clientToken: '',
+    validationImg: ''
   },
   mutations: {
-    GET_TOKEN(state, token) {
+    SET_TOKEN(state, token) {
       state.token = token
     },
-    GET_ID(state, id) {
-      state.id = id
+    SET_clientToken(state, clientToken) {
+      state.clientToken = clientToken
+    },
+    SET_ValidationImg(state, validationImg) {
+      state.validationImg = validationImg
     }
   },
   actions: {
     async loginAction({ commit }, loginData) {
       const { data } = await loginAPI(loginData)
-      console.log(data)
-      commit('GET_TOKEN', data)
+      console.log(data.token)
+      commit('SET_TOKEN', data.token)
     },
-    async valiDation({ commit }, id) {
-      console.log(id)
-      const { data } = await getValidationAPI(id)
-      console.log(data)
-      commit('GET_ID', data)
+    async valiDation({ commit }, clientToken) {
+      const res = await getValidationAPI(clientToken)
+      commit('SET_clientToken', clientToken)
+      commit('SET_ValidationImg', res.request.responseURL)
     }
+
   }
 }

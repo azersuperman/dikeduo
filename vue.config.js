@@ -38,7 +38,7 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        target: 'http://ihrm-java.itheima.net/',
+        target: 'http://likede2-admin.itheima.net/likede/',
         changeOrigin: true
       }
     }

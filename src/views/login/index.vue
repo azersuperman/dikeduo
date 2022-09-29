@@ -39,13 +39,14 @@
         </span>
 
         <el-input
+          v-model='loginForm.code'
           class="ell"
           placeholder="请输入验证码"
         ></el-input>
 
         <!-- 验证码 -->
         <div class="elr">
-          <img src="" alt="">
+          <img ref='validation' :src="validationImg" @click="getValidationImg">
         </div>
 
       </el-form-item>
@@ -68,10 +69,14 @@ export default {
     return {
       loginForm: {
         loginName: '',
-        password: ''
+        password: '',
+        code: '',
+        clientToken: '',
+        loginType: 0
       },
       passwordType: 'password',
       loading: false,
+      validationImg: '',
       rules: {
         loginName: [{
           required: true,
@@ -86,14 +91,11 @@ export default {
       }
     }
   },
-  computed: {
-    id() {
-      return Math.floor(Math.random() * 100)
-    }
-  },
+
   created() {
     this.validation()
   },
+
   methods: {
     showPwd() {
       if (this.passwordType === 'password') {
@@ -105,24 +107,32 @@ export default {
         this.$refs.password.focus()
       })
     },
+    // 登录
     async login() {
       try {
         await this.$store.dispatch('user/loginAction', this.loginForm)
-        console.log(1)
         this.loading = true
+        this.$router.push('/')
       } finally {
         this.loading = false
       }
     },
+
+    // 点击刷新验证码
+    getValidationImg() {
+      this.validation()
+    },
+
+    // 刷新获取验证码
     async validation() {
       try {
-        console.log(this.id)
-        await this.$store.dispatch('user/valiDation', this.id)
+        this.loginForm.clientToken = Math.floor(Math.random() * 100)
+        await this.$store.dispatch('user/valiDation', this.loginForm.clientToken)
+        this.validationImg = this.$store.state.user.validationImg
       } catch (e) {
         console.log(new Error(e))
       }
     }
-
   }
 }
 </script>

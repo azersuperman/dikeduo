@@ -13,8 +13,8 @@ export const loginAPI = (data) => {
   })
 }
 
-export const getValidationAPI = (num) => {
+export const getValidationAPI = (id) => {
   return request({
-    url: `/user-service/user/imageCode/${num}`
+    url: `user-service/user/imageCode/${id}`
   })
 }
